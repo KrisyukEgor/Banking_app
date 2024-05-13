@@ -10,6 +10,7 @@
 
 #include "card.h"
 #include "bank_meneger.h"
+#include "card_to_scene.h"
 
 namespace Ui {
 class Home_window;

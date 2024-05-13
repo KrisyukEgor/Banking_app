@@ -1,19 +1,20 @@
 #ifndef CARD_H
 #define CARD_H
 
-#include <QGraphicsRectItem>
 #include <QString>
 #include <QRandomGenerator>
+#include <QDate>
+
 
 #include "luna.h"
 #include "bank_account.h"
 
-class Card : public QGraphicsRectItem
+class Card
 {
 private:
 
     QString card_number;
-    Bank_account bank_account;
+    Bank_account* bank_account;
 
     QString pin;
 
@@ -22,20 +23,39 @@ private:
 
     QString cvv;
 
-    void create_card_number(long long );
+    void create_card_number(long long, QString);
 
     void create_cvv();
 
+    void create_pin();
+
+    void create_date();
+
+    void create_bank_account(long long);
 
 public:
-    void create_bank_account();
 
-    Card(QGraphicsItem* parent = nullptr);
+    Card();
 
+    void Create_Mastercard_card(long long);
+    void Create_Visa_card(long long);
 
-    void Create_card(long long);
-    void add_card_to_scene();
+    void Set_money_to_bank_account(long long);
+    void Minus_money_from_bank_account(long long);
+    void Plus_money_to_bank_account(long long);
 
+    long double Get_current_money();
+
+    QString GetCardNumber();
+    QString GetPin();
+    QString GetCvv();
+    QString GetMonth();
+    QString GetYear();
+
+    long long GetMoney();
+    QString Get_banking_app_name();
+
+    Bank_account* Get_bank_account();
 
 
 };

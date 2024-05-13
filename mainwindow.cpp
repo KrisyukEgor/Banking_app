@@ -37,8 +37,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
     connect(ui -> Registration_label, &QLabel::linkActivated, this, &MainWindow::Open_Registration_window);
 
-    meneger.Registrer_card();
-
 }
 
 MainWindow::~MainWindow()
@@ -153,6 +151,4 @@ void MainWindow::on_View_PassWord_button_toggled(bool checked)
 
     }
 }
-
-
 

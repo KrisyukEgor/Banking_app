@@ -151,16 +151,74 @@ bool Bank_meneger::Check_password(QString &password, int index){
 }
 
 
-void Bank_meneger::Add_card_to_user(long long index, Card* card){
+void Bank_meneger::Add_to_user_new_Mastercard_card(long long index){
+    Card* card = new Card();
+
+    card -> Create_Mastercard_card(all_cards_list.length() + 1);
 
     user_list[index].first -> AddCard(card);
     all_cards_list.append(card);
+
 }
 
-void Bank_meneger::Registrer_card(){
-    Card card = new Card(nullptr);
+void Bank_meneger::Add_to_user_new_Visa_card(long long index){
+    Card* card = new Card();
+
+    card -> Create_Visa_card(all_cards_list.length() + 1);
+
+    user_list[index].first -> AddCard(card);
+    all_cards_list.append(card);
+
+}
 
 
-    card.Create_card(all_cards_list.length() + 1);
+void Bank_meneger::Set_money_to_bank_account(long long money){
 
+}
+
+
+Bank_account* Bank_meneger::Get_account_from_card(QString number_of_card){
+    number_of_card.remove(' ');
+
+    QString temp = number_of_card.mid(6,9);
+
+    int index_of_last_zero = 0;
+
+    for(int i = 0; i < number_of_card.length(); ++i){
+        if(temp[i] == '0'){
+            index_of_last_zero++;
+        }
+        else{
+            break;
+        }
+    }
+
+
+    temp.remove(0,index_of_last_zero);
+
+    return all_cards_list.at(temp.toInt() - 1) -> Get_bank_account();
+}
+
+Bank_account* Bank_meneger::Get_banking_acc(QString number){
+
+    long long index = Bank_account::Get_acc_number(number);
+    return all_cards_list.at(index - 1) -> Get_bank_account();
+}
+
+long long Bank_meneger::Get_all_card_count(){
+    return all_cards_list.length();
+}
+
+long long Bank_meneger::Get_user_card_count(long long index){
+    return user_list[index].first -> Get_cards_count();
+}
+
+
+QString Bank_meneger::Get_user_card_number(long long index, long long card_index){
+    return user_list[index].first -> Get_card_number(card_index);
+}
+
+
+long long Bank_meneger::Get_user_card_money(long long index, long long card_index){
+    return user_list[index].first -> Get_card_money(card_index);
 }

@@ -59,6 +59,17 @@ QString User::GetId(){
     return id;
 }
 
+long long User::Get_cards_count(){
+    return card_list.length();
+}
+
+QString User::Get_card_number(long long index){
+    return card_list[index] -> GetCardNumber();
+}
+
+long long User::Get_card_money(long long index){
+    return card_list[index] -> GetMoney();
+}
 void User::AddCard(Card* card){
 
     card_list.append(card);

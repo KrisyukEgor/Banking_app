@@ -7,6 +7,7 @@
 
 #include "registration_window.h"
 #include "home_window.h"
+#include "transactions.h"
 #include "sha256.h"
 #include "luna.h"
 

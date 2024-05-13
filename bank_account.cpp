@@ -5,40 +5,81 @@ Bank_account::Bank_account()
 
 }
 
-void Bank_account::SetName(QString str){
+void Bank_account::SetName(long long number){
 
-    str.remove(' ');
+    QString number_str = QString::number(number);
+    number_str = number_str.rightJustified(9,'0');
+
 
     QString result;
 
-    for(int i = 0; i < 6; ++i){
-        result.insert(0,str[i]);
-    }
+    result += "96251";
 
-    QString temp = str.mid(str.length() - 7, str.length() - 1);
-
-    QString temp_16 = QString::number(temp.toInt(),16);
+    QString temp = number_str.mid(3, 6);
 
 
-    QString mid_temp = str.mid(6,9);
-
-    int temp_mid = mid_temp.toInt();
-
-    for(int i = 0; i < 16; ++i){
-        temp_mid += 3;
-        temp_mid ^= 2;
-        temp_mid |= 4;
-    }
-
-
-    temp_mid *= 2;
+    QString temp_16 = QString::number((temp.toInt() + 999) * 5,16);
 
     result += temp_16.toUpper();
-    result += QString::number(temp_mid);
+    result += '-';
 
+    QString temp_start = number_str.mid(0,3);
 
-    result = result.leftJustified(22,'0');
+    QString temp_start_16 = QString::number(temp_start.toInt() * 5,16);
+
+    result += temp_start_16.toLower();
+
+    result += "G";
+
+    result = result.leftJustified(18,'0');
 
     name = result;
 
+}
+
+long long Bank_account::Get_acc_number(QString acc_number){
+    long long result = -1;
+
+
+    acc_number.remove(0,5);
+
+    QString first_part;
+    QString second_part;
+
+    int index_of_first_separator = acc_number.indexOf('-');
+
+    first_part = acc_number.mid(0,index_of_first_separator);
+
+    int index_of_second_separator = acc_number.indexOf('G');
+
+    second_part = acc_number.mid(index_of_first_separator + 1, index_of_second_separator - index_of_first_separator - 1);
+
+
+    int first_number = first_part.toInt(nullptr,16) / 5 - 999;
+    int second_number = second_part.toInt(nullptr,16) / 5;
+
+    result = second_number * 1000000 + first_number;
+
+
+    return result;
+}
+
+void Bank_account::SetMoney(long double number){
+    money = number;
+}
+
+void Bank_account::Minus_money(long long number){
+    money -= number;
+}
+
+void Bank_account::Plus_money(long long number){
+    money += number;
+}
+
+long long Bank_account::Get_current_money(){
+    return money;
+}
+
+QString Bank_account::GetName(){
+    return name;
 }

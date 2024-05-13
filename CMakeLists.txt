@@ -27,6 +27,10 @@ set(PROJECT_SOURCES
         sha256.h sha256.cpp
         luna.h luna.cpp
         bank_account.h bank_account.cpp
+        transactions.h transactions.cpp
+        card_to_scene.h card_to_scene.cpp
+        card_rect.h card_rect.cpp
+
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

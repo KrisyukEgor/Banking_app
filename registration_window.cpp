@@ -183,7 +183,6 @@ void Registration_window::on_Password_line_textChanged(const QString &temp)
     }
 }
 
-
 void Registration_window::on_Repeat_password_line_textChanged(const QString &temp)
 {
     if(temp != ""){

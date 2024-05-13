@@ -39,6 +39,11 @@ public:
     QString GetLogin();
     QString GetId();
 
+    long long Get_cards_count();
+
+    QString Get_card_number(long long);
+    long long Get_card_money(long long);
+
 
     void Debug();
 

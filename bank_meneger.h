@@ -15,11 +15,11 @@ private:
     QString all_users_file_path;
     QString folder_path;
 
+
     Bank_meneger();
 
 
 public:
-    void Registrer_card();
 
     static Bank_meneger& getInstance();   // Singleton
     long long GetUserCount();
@@ -61,8 +61,25 @@ public:
     long long Is_user_login_exist(QString &);
     bool Check_password(QString &, int);
 
-    void Add_card_to_user(long long, Card* );
+    void Add_to_user_new_Mastercard_card(long long );
+    void Add_to_user_new_Visa_card(long long);
+
+    void Set_money_to_bank_account(long long);
+    long long Get_current_money();
+
+    void Minus_money_from_bank_account(long long);
+    void Plus_money_to_bank_account(long long);
+
+    Bank_account* Get_account_from_card(QString);
+    Bank_account* Get_banking_acc(QString);
+
     void Add_card_to_scene(long long, long long);
+
+    long long Get_all_card_count();
+    long long Get_user_card_count(long long);
+
+    QString Get_user_card_number(long long, long long);
+    long long Get_user_card_money(long long, long long);
 
 };
 

@@ -1,5 +1,6 @@
 #include "home_window.h"
 #include "ui_home_window.h"
+#include "allusersfile.h"
 #include <QScrollArea>
 
 extern Bank_meneger& meneger;
@@ -7,12 +8,21 @@ extern Bank_meneger& meneger;
 Home_window::Home_window(long long user_index, QWidget *parent) :QDialog(parent),ui(new Ui::Home_window)
 {
     ui->setupUi(this);
-    ui -> stackedWidget -> setCurrentIndex(0);
+
+    ui -> stackedWidget -> setCurrentIndex(1);
     scene = new QGraphicsScene();
 
     ui -> graphicsView -> setScene(scene);
 
     this -> user_index = user_index;
+
+    QString folder_path = QDir::currentPath() + "/files";
+    QString file_path = folder_path + "/All users";
+
+    meneger.Set_file_path_to_all_users(file_path);
+    meneger.Set_folder_path(folder_path);
+
+    AllUsersFile::Users_in_file_to_meneger();
 
     Add_Personal_user_data_to_window();
 }
@@ -39,6 +49,17 @@ void Home_window::Add_Personal_user_data_to_window(){
 
     ui -> Login_line -> setText(meneger.GetUserLogin(user_index));
     ui -> Email_line -> setText(meneger.GetUserEmail(user_index));
+
+    Card_to_scene card_to_scene;
+
+    QList<QPair<QString, long double>> temp;
+
+    QPair<QString, long double> temp_pair = {"1234 5678 1234 5678", 10.4512};
+
+    temp.append(temp_pair);
+
+    card_to_scene.Add_cards_to_scene(scene, temp);
+
 }
 
 void Home_window::on_Account_button_clicked()

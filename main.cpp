@@ -5,9 +5,11 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
+
+    Home_window w(0);
+
     w.setWindowTitle("");
-    w.setFixedSize(800,600);
+
 
 
     w.show();

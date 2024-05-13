@@ -1,28 +1,58 @@
 #include "card.h"
 
-Card::Card(QGraphicsItem* parent) : QGraphicsRectItem(parent)
+Card::Card()
 {
 
 }
 
-void Card::add_card_to_scene(){
+void Card::Create_Mastercard_card(long long card_number){
 
-    setRect(0,0,300,150);
+    create_bank_account(card_number);
+
+    create_card_number(card_number, "5");
+
+    create_cvv();
+    create_pin();
+    create_date();
+
+    bank_account -> SetMoney(10);
+
 }
 
-void Card::Create_card(long long card_number){
+void Card::Create_Visa_card(long long card_number){
 
-    create_card_number(card_number);
-    this -> card_number = "9999 4399 9999 9999";
-    //99999998967F705033179
+    create_bank_account(card_number);
 
-    create_bank_account();
+    create_card_number(card_number, "4");
+
+    create_cvv();
+    create_pin();
+    create_date();
+
 }
 
-void Card::create_card_number(long long temp_number) {
+long double Card::Get_current_money(){
+
+    return bank_account -> Get_current_money();
+}
+
+void Card::Set_money_to_bank_account(long long money){
+    bank_account -> SetMoney(money);
+}
+
+void Card::Plus_money_to_bank_account(long long money){
+    bank_account -> Plus_money(money);
+}
+
+void Card::Minus_money_from_bank_account(long long money){
+    bank_account -> Minus_money(money);
+}
+
+
+void Card::create_card_number(long long temp_number, QString first_symbol) {
     QString number;
 
-    number.append("5"); //Mastercard
+    number.append(first_symbol);
     number.append("1");
 
     number.append("5269");
@@ -36,20 +66,64 @@ void Card::create_card_number(long long temp_number) {
     number.insert(14," ");
 
     card_number = number;
-
-    qDebug() << card_number;
-
 }
 
-void Card::create_bank_account(){
+void Card::create_bank_account(long long number){
 
-    qDebug() << card_number;
-    bank_account.SetName(card_number);
+    bank_account = new Bank_account();
+    bank_account -> SetName(number);
+
+    bank_account -> Get_acc_number(bank_account -> GetName());
+
+    bank_account -> SetMoney(0);
 
 }
-
 
 void Card::create_cvv(){
     cvv = QString::number(QRandomGenerator::global() -> bounded(1,999)).rightJustified(3,'0');
-    qDebug() << cvv;
+
+}
+
+void Card::create_pin(){
+    pin = QString::number(QRandomGenerator::global() -> bounded(1,9999)).rightJustified(4,'0');
+
+}
+
+void Card::create_date(){
+    month = QString::number(QDate::currentDate().month()).rightJustified(2,'0');
+
+    year = QString::number(QDate::currentDate().year() + 4).rightJustified(2,'0');
+}
+
+
+QString Card::GetCardNumber(){
+    return card_number;
+}
+
+QString Card::GetCvv(){
+    return cvv;
+}
+
+QString Card::GetPin(){
+    return pin;
+}
+
+QString Card::GetMonth(){
+    return month;
+}
+
+QString Card::GetYear(){
+    return year;
+}
+
+long long Card::GetMoney(){
+    return bank_account -> Get_current_money();
+}
+
+QString Card::Get_banking_app_name(){
+    return bank_account -> GetName();
+}
+
+Bank_account* Card::Get_bank_account(){
+    return bank_account;
 }
