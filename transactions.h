@@ -4,6 +4,7 @@
 #include "card.h"
 #include "bank_meneger.h"
 #include <QString>
+#include <QMessageBox>
 \
 class Transactions
 {

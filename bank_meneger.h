@@ -3,6 +3,7 @@
 
 #include "user.h"
 #include "card.h"
+#include "allusersfile.h"
 
 #include <QPair>
 
@@ -65,7 +66,6 @@ public:
     void Add_to_user_new_Visa_card(long long);
 
     void Set_money_to_bank_account(long long);
-    long long Get_current_money();
 
     void Minus_money_from_bank_account(long long);
     void Plus_money_to_bank_account(long long);
@@ -79,7 +79,22 @@ public:
     long long Get_user_card_count(long long);
 
     QString Get_user_card_number(long long, long long);
-    long long Get_user_card_money(long long, long long);
+    double Get_user_card_money(long long, long long);
+
+    QString Get_user_card_pin(long long, long long);
+    QString Get_user_card_cvv(long long, long long);
+    QString Get_user_card_month(long long, long long);
+    QString Get_user_card_year(long long, long long);
+
+    QString Get_user_card_banking_app_name(long long, long long);
+
+    void Register_new_Mastercard_card_to_user(long long);
+    void Register_new_Visa_card_to_user(long long);
+
+    void Set_card_to_user(long long, Card*);
+    void Add_card(Card*);
+
+    Card* Get_user_card(long long, long long);
 
 };
 

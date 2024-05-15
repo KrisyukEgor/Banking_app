@@ -8,12 +8,14 @@
 #include <QList>
 #include <QPair>
 
+#include "allusersfile.h"
+
 
 class Card_rect : public QGraphicsRectItem
 {
 private:
     qreal x,y;
-    qreal length, width;
+    qreal width,height;
 
     QString card_number;
     long long money;
@@ -32,7 +34,7 @@ private:
 public:
     Card_rect(QString, long long, QGraphicsItem* parent = nullptr);
 
-    void Add_card_to_scene(QGraphicsScene*, qreal, qreal, qreal, qreal);
+    void Add_card_to_scene(QGraphicsScene*, qreal, QString mode);
 
     void Rect_to_right();
     void Rect_to_left();

@@ -40,11 +40,9 @@ public:
     void Create_Mastercard_card(long long);
     void Create_Visa_card(long long);
 
-    void Set_money_to_bank_account(long long);
-    void Minus_money_from_bank_account(long long);
-    void Plus_money_to_bank_account(long long);
-
-    long double Get_current_money();
+    void Set_money_to_bank_account(double);
+    void Minus_money_from_bank_account(double);
+    void Plus_money_to_bank_account(double);
 
     QString GetCardNumber();
     QString GetPin();
@@ -52,7 +50,18 @@ public:
     QString GetMonth();
     QString GetYear();
 
-    long long GetMoney();
+
+    void Set_card_number(QString);
+    void SetPin(QString);
+    void SetCvv(QString);
+    void SetMonth(QString);
+    void SetYear(QString);
+
+    void Set_bank_account_name(QString);
+
+
+
+    double Get_current_money();
     QString Get_banking_app_name();
 
     Bank_account* Get_bank_account();

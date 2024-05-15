@@ -2,7 +2,7 @@
 
 Card::Card()
 {
-
+    bank_account = new Bank_account();
 }
 
 void Card::Create_Mastercard_card(long long card_number){
@@ -14,8 +14,6 @@ void Card::Create_Mastercard_card(long long card_number){
     create_cvv();
     create_pin();
     create_date();
-
-    bank_account -> SetMoney(10);
 
 }
 
@@ -31,20 +29,15 @@ void Card::Create_Visa_card(long long card_number){
 
 }
 
-long double Card::Get_current_money(){
-
-    return bank_account -> Get_current_money();
-}
-
-void Card::Set_money_to_bank_account(long long money){
+void Card::Set_money_to_bank_account(double money){
     bank_account -> SetMoney(money);
 }
 
-void Card::Plus_money_to_bank_account(long long money){
+void Card::Plus_money_to_bank_account(double money){
     bank_account -> Plus_money(money);
 }
 
-void Card::Minus_money_from_bank_account(long long money){
+void Card::Minus_money_from_bank_account(double money){
     bank_account -> Minus_money(money);
 }
 
@@ -70,10 +63,7 @@ void Card::create_card_number(long long temp_number, QString first_symbol) {
 
 void Card::create_bank_account(long long number){
 
-    bank_account = new Bank_account();
     bank_account -> SetName(number);
-
-    bank_account -> Get_acc_number(bank_account -> GetName());
 
     bank_account -> SetMoney(0);
 
@@ -116,7 +106,8 @@ QString Card::GetYear(){
     return year;
 }
 
-long long Card::GetMoney(){
+double Card::Get_current_money(){
+
     return bank_account -> Get_current_money();
 }
 
@@ -127,3 +118,24 @@ QString Card::Get_banking_app_name(){
 Bank_account* Card::Get_bank_account(){
     return bank_account;
 }
+
+void Card::Set_card_number(QString value){
+    card_number = value;
+}
+
+void Card::SetPin(QString value){
+    pin = value;
+}
+void Card::SetCvv(QString value){
+    cvv = value;
+}
+void Card::SetMonth(QString value){
+    month = value;
+}
+void Card::SetYear(QString value){
+    year = value;
+}
+void Card::Set_bank_account_name(QString value){
+    bank_account -> SetName(value);
+}
+

@@ -42,8 +42,19 @@ public:
     long long Get_cards_count();
 
     QString Get_card_number(long long);
-    long long Get_card_money(long long);
+    double Get_card_money(long long);
 
+    QString Get_card_pin(long long);
+    QString Get_card_cvv(long long);
+    QString Get_card_month(long long);
+    QString Get_card_year(long long);
+
+    QString Get_card_banking_app_name(long long);
+
+
+    Card* Register_new_Mastercard_card(long long);
+    Card* Register_new_Visa_card(long long);
+    Card* Get_card(long long);
 
     void Debug();
 

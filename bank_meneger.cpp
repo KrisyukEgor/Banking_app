@@ -219,6 +219,54 @@ QString Bank_meneger::Get_user_card_number(long long index, long long card_index
 }
 
 
-long long Bank_meneger::Get_user_card_money(long long index, long long card_index){
+double Bank_meneger::Get_user_card_money(long long index, long long card_index){
     return user_list[index].first -> Get_card_money(card_index);
+}
+
+QString Bank_meneger::Get_user_card_pin(long long index, long long card_index){
+    return user_list[index].first -> Get_card_pin(card_index);
+}
+
+QString Bank_meneger::Get_user_card_cvv(long long index, long long card_index){
+    return user_list[index].first -> Get_card_cvv(card_index);
+}
+QString Bank_meneger::Get_user_card_month(long long index, long long card_index){
+    return user_list[index].first -> Get_card_month(card_index);
+}
+QString Bank_meneger::Get_user_card_year(long long index, long long card_index){
+    return user_list[index].first -> Get_card_year(card_index);
+}
+QString Bank_meneger::Get_user_card_banking_app_name(long long index, long long card_index){
+    return user_list[index].first -> Get_card_banking_app_name(card_index);
+}
+
+void Bank_meneger::Set_card_to_user(long long index, Card* card){
+    user_list[index].first -> AddCard(card);
+}
+
+void Bank_meneger::Add_card(Card* card){
+    all_cards_list.append(card);
+}
+void Bank_meneger::Register_new_Mastercard_card_to_user(long long index){
+
+    Card* card = user_list[index].first -> Register_new_Mastercard_card(all_cards_list.length() + 1);
+
+    AllUsersFile::Add_card_to_user(index, user_list[index].first -> Get_cards_count() - 1);
+
+    all_cards_list.append(card);
+
+
+}
+
+Card* Bank_meneger::Get_user_card(long long index, long long card_index){
+    return user_list[index].first -> Get_card(card_index);
+}
+
+void Bank_meneger::Register_new_Visa_card_to_user(long long index){
+
+    Card* card = user_list[index].first -> Register_new_Visa_card(all_cards_list.length() + 1);
+
+    AllUsersFile::Add_card_to_user(index, user_list[index].first -> Get_cards_count() - 1);
+
+    all_cards_list.append(card);
 }

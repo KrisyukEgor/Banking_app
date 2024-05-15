@@ -67,12 +67,57 @@ QString User::Get_card_number(long long index){
     return card_list[index] -> GetCardNumber();
 }
 
-long long User::Get_card_money(long long index){
-    return card_list[index] -> GetMoney();
+double User::Get_card_money(long long index){
+    return card_list[index] -> Get_current_money();
 }
+
+QString User::Get_card_pin(long long index){
+    return card_list[index] -> GetPin();
+}
+
+QString User::Get_card_cvv(long long index){
+    return card_list[index] -> GetCvv();
+}
+
+QString User::Get_card_month(long long index){
+    return card_list[index] -> GetMonth();
+}
+
+QString User::Get_card_year(long long index){
+    return card_list[index] -> GetYear();
+}
+
+QString User::Get_card_banking_app_name(long long index){
+    return card_list[index] -> Get_banking_app_name();
+}
+
+
 void User::AddCard(Card* card){
 
     card_list.append(card);
+}
+
+Card* User::Register_new_Mastercard_card( long long number){
+
+    Card* card = new Card();
+    card -> Create_Mastercard_card(number);
+
+    card_list.append(card);
+    return card;
+}
+
+Card* User::Register_new_Visa_card(long long number){
+
+    Card* card = new Card();
+    card -> Create_Visa_card(number);
+
+    card_list.append(card);
+
+    return card;;
+}
+
+Card* User::Get_card(long long index){
+    return card_list[index];
 }
 
 void User::Debug(){

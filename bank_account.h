@@ -9,19 +9,20 @@ class Bank_account
 {
 private:
     QString name;
-    long double money;
+    double money = 0;
 
 public:
     Bank_account();
 
     void SetName(long long);
+    void SetName(QString);
     static long long Get_acc_number(QString);
 
-    void SetMoney(long double);
-    void Minus_money(long long);
-    void Plus_money(long long);
+    void SetMoney(double);
+    void Minus_money(double);
+    void Plus_money(double);
 
-    long long Get_current_money();
+    double Get_current_money();
     QString GetName();
 
 };

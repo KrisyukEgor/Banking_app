@@ -4,25 +4,36 @@ Card_rect::Card_rect(QString number, long long count,QGraphicsItem *parent) : QG
 {
     card_number = number;
     money = count;
+
     add_colors();
 }
 
-void Card_rect::Add_card_to_scene(QGraphicsScene *scene, qreal x , qreal y , qreal length, qreal width){
+void Card_rect::Add_card_to_scene(QGraphicsScene *scene, qreal x , QString mode){
 
     this -> x = x;
-    this -> y = y;
-    this -> length = length;
-    this -> width = width;
 
-    Add_rect(scene);
-    Add_text(scene);
+    if(mode == "big"){
+        y = 0;
+        width = 300;
+        height = 180;
+        Add_rect(scene);
+        Add_text(scene);
+    }
+
+    else if(mode == "small"){
+        y = 30;
+        width = 200;
+        height = 60;
+        Add_rect(scene);
+
+    }
 
 }
 
 
 void Card_rect::Add_rect(QGraphicsScene* scene){
 
-    QRectF rect (x,y,length,width);
+    QRectF rect (x,y,width,height);
 
     qreal cornerRadius = 20.0;
 
@@ -61,6 +72,7 @@ void Card_rect::Add_text(QGraphicsScene *scene){
     card_number_text -> setDefaultTextColor(Qt::white);
 
     QFont font = card_number_text -> font();
+
     font.setPointSize(14);
     font.setFamily("Arial");
 
@@ -71,19 +83,7 @@ void Card_rect::Add_text(QGraphicsScene *scene){
 
     scene -> addItem(card_number_text);
 
-    long long int_part = (long long)money;
-    long double double_part = money - int_part;
-
-    QString double_temp;
-    QString money_str = QString::number(int_part) + '.';
-
-
-    double_part *= 100;
-    double_part = std::round(double_part);
-
-    int_part = int(double_part);
-
-    money_str += QString::number(int_part);
+    QString money_str = AllUsersFile::From_long_double_to_QString(money);
 
     money_text = new QGraphicsTextItem(money_str);
 

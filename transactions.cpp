@@ -56,7 +56,14 @@ int Transactions::do_transaction(Bank_account* from_acc, long long money, Bank_a
 
     int result = 0;
 
+    QMessageBox* box = new QMessageBox();
+    box -> setWindowTitle("Error");
+
     if(from_acc -> Get_current_money() < money){
+
+        box -> setText("Нехватка средств");
+        box -> exec();
+
         return 2;
     }
 
@@ -73,6 +80,9 @@ int Transactions::do_transaction(Bank_account* from_acc, long long money, Bank_a
         result = 1;
         to_acc -> Minus_money(money);
         from_acc -> Plus_money(money);
+
+        box -> setText("Банковская ошибка");
+        box -> exec();
     }
 
     return result;

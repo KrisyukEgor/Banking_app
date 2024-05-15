@@ -34,7 +34,9 @@ Registration_window::Registration_window(QWidget *parent) :QDialog(parent), ui(n
     palette.setColor(QPalette::Button, QColor(34, 245, 73));
     ui -> Continue_button -> setPalette(palette);
 
+
 }
+
 Registration_window::~Registration_window()
 {
     delete ui;

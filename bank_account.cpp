@@ -37,6 +37,10 @@ void Bank_account::SetName(long long number){
 
 }
 
+void Bank_account::SetName(QString value){
+    name = value;
+}
+
 long long Bank_account::Get_acc_number(QString acc_number){
     long long result = -1;
 
@@ -64,19 +68,19 @@ long long Bank_account::Get_acc_number(QString acc_number){
     return result;
 }
 
-void Bank_account::SetMoney(long double number){
+void Bank_account::SetMoney(double number){
     money = number;
 }
 
-void Bank_account::Minus_money(long long number){
+void Bank_account::Minus_money(double number){
     money -= number;
 }
 
-void Bank_account::Plus_money(long long number){
+void Bank_account::Plus_money(double number){
     money += number;
 }
 
-long long Bank_account::Get_current_money(){
+double Bank_account::Get_current_money(){
     return money;
 }
 

@@ -5,18 +5,17 @@
 #include <QGraphicsRectItem>
 #include <QString>
 #include <QGraphicsScene>
-#include <QPen>
+
 #include <QList>
-#include <QPair>
-#include <QRandomGenerator>
-#include <QGraphicsTextItem>
-#include <QFont>
+
+#include "card_rect.h"
 
 
-class Card_to_scene : public QGraphicsRectItem, public QObject
+class Card_to_scene
 {
 private:
 
+    QList<Card_rect* > card_rect_list;
 
 public:
     Card_to_scene();

@@ -25,6 +25,13 @@ Home_window::Home_window(long long user_index, QWidget *parent) :QDialog(parent)
     AllUsersFile::Users_in_file_to_meneger();
 
     Add_Personal_user_data_to_window();
+
+    Add_cards_to_scene();
+
+    double a = 1.7;
+    double b = 1.8;
+
+    qDebug() << a + b;
 }
 
 Home_window::~Home_window()
@@ -50,17 +57,13 @@ void Home_window::Add_Personal_user_data_to_window(){
     ui -> Login_line -> setText(meneger.GetUserLogin(user_index));
     ui -> Email_line -> setText(meneger.GetUserEmail(user_index));
 
-    Card_to_scene card_to_scene;
+    if(meneger.Get_user_card_count(user_index) > 0){
+        current_card = meneger.Get_user_card(user_index, 0);
+    }
 
-    QList<QPair<QString, long double>> temp;
-
-    QPair<QString, long double> temp_pair = {"1234 5678 1234 5678", 10.4512};
-
-    temp.append(temp_pair);
-
-    card_to_scene.Add_cards_to_scene(scene, temp);
 
 }
+
 
 void Home_window::on_Account_button_clicked()
 {
@@ -71,41 +74,40 @@ void Home_window::on_Cards_button_clicked()
 {
     ui -> stackedWidget -> setCurrentIndex(1);
 }
-void Home_window::on_Transfer_button_clicked()
-{
-    ui -> stackedWidget -> setCurrentIndex(2);
-}
 
 void Home_window::on_Transactions_button_clicked()
 {
-    ui -> stackedWidget -> setCurrentIndex(3);
-}
-
-
-
-void Home_window::on_Card_data_button_clicked()
-{
-
-}
-
-void Home_window::on_Transfer_money_buttob_clicked()
-{
     ui -> stackedWidget -> setCurrentIndex(2);
 }
 
-void Home_window::on_Card_window_transactions_button_clicked()
-{
-    ui -> stackedWidget -> setCurrentIndex(3);
+void Home_window::Add_cards_to_scene(){
+    scene -> clear();
+
+    QList<QPair<QString, long double>> temp;
+    QPair<QString, long double> temp_pair;
+
+    for(long long i = 0; i < meneger.Get_user_card_count(user_index); ++i){
+        temp_pair = {meneger.Get_user_card_number(user_index, i), meneger.Get_user_card_money(user_index, i)};
+        temp.append(temp_pair);
+    }
+
+    temp.append(temp_pair);
+
+    card_to_scene.Add_cards_to_scene(scene, temp);
+
 }
 
-
+void Home_window::on_Card_data_button_clicked()
+{
+    card_data_window = new Card_data_window(current_card);
+    card_data_window -> exec();
+}
 
 
 void Home_window::on_stackedWidget_currentChanged(int index)
 {
     ui -> Account_button -> setStyleSheet("color: white;");
     ui -> Cards_button -> setStyleSheet("color: white;");
-    ui -> Transfer_button -> setStyleSheet("color: white;");
     ui -> Transactions_button -> setStyleSheet("color: white;");
 
 
@@ -116,10 +118,58 @@ void Home_window::on_stackedWidget_currentChanged(int index)
         ui -> Cards_button -> setStyleSheet("background-color:blue;color: white;");
     }
     else if(index == 2){
-        ui -> Transfer_button -> setStyleSheet("background-color:blue;color: white;");
-    }
-    else if(index == 3){
         ui -> Transactions_button -> setStyleSheet("background-color:blue;color: white;");
     }
+}
+
+void Home_window::on_menu_change_size_button_toggled(bool checked)
+{
+    qreal width = ui -> menu_card_frame -> width();
+    qreal height = ui -> menu_card_frame -> height();
+
+    QTimer* timer = new QTimer(this);
+
+    timer -> setInterval(1);
+
+    if(checked){
+
+        connect(timer, &QTimer::timeout, this, [=] () mutable{
+            if(width > ui -> menu_change_size_button -> x() + ui -> menu_change_size_button -> width() + 20){
+                width -= 5;
+                ui -> menu_card_frame -> resize(width, height);
+            }
+            else{
+                timer -> stop();
+            }
+        });
+    }
+    else{
+
+        connect(timer, &QTimer::timeout, this, [=] () mutable{
+            if(width < ui -> Register_new_card_button -> x() + ui -> Register_new_card_button -> width() + 20){
+                width += 5;
+                ui -> menu_card_frame -> resize(width, height);
+            }
+            else{
+                timer -> stop();
+            }
+        });
+    }
+
+    timer -> start();
+}
+
+
+void Home_window::on_Register_new_card_button_clicked()
+{
+    register_new_card_window = new Register_new_card_window(user_index);
+    register_new_card_window -> exec();
+
+}
+
+
+void Home_window::on_Transfer_money_button_clicked()
+{
+
 }
 
