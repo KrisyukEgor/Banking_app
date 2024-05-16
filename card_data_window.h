@@ -16,7 +16,7 @@ class Card_data_window : public QDialog
     Q_OBJECT
 
 public:
-    explicit Card_data_window(Card* card,QWidget *parent = nullptr);
+    explicit Card_data_window(long long, Card* card,QWidget *parent = nullptr);
     ~Card_data_window();
 
 private slots:
@@ -29,6 +29,7 @@ private:
     Add_money_window* add_money_window;
 
     Card* current_card;
+    long long current_user_index;
 };
 
 #endif // CARD_DATA_WINDOW_H

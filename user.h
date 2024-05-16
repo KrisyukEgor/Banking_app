@@ -18,7 +18,6 @@ private:
 
     QList<Card*> card_list;
 
-
 public:
     User();
     void setName(const QString &);
@@ -57,6 +56,7 @@ public:
     Card* Get_card(long long);
 
     void Debug();
+
 
 };
 

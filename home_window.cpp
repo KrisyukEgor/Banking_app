@@ -16,11 +16,15 @@ Home_window::Home_window(long long user_index, QWidget *parent) :QDialog(parent)
 
     this -> user_index = user_index;
 
+    ui -> Transactions_table_widget -> setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
     QString folder_path = QDir::currentPath() + "/files";
     QString file_path = folder_path + "/All users";
 
     meneger.Set_file_path_to_all_users(file_path);
     meneger.Set_folder_path(folder_path);
+
+    current_card = new Card();
 
     AllUsersFile::Users_in_file_to_meneger();
 
@@ -28,10 +32,9 @@ Home_window::Home_window(long long user_index, QWidget *parent) :QDialog(parent)
 
     Add_cards_to_scene();
 
-    double a = 1.7;
-    double b = 1.8;
+    Update_transaction_table();
 
-    qDebug() << a + b;
+
 }
 
 Home_window::~Home_window()
@@ -58,7 +61,9 @@ void Home_window::Add_Personal_user_data_to_window(){
     ui -> Email_line -> setText(meneger.GetUserEmail(user_index));
 
     if(meneger.Get_user_card_count(user_index) > 0){
-        current_card = meneger.Get_user_card(user_index, 0);
+        current_card = meneger.Get_user_card(user_index, 1);
+
+        ui -> Card_number_line -> setText(current_card -> GetCardNumber());
     }
 
 
@@ -73,12 +78,31 @@ void Home_window::on_Account_button_clicked()
 void Home_window::on_Cards_button_clicked()
 {
     ui -> stackedWidget -> setCurrentIndex(1);
+
+    if(meneger.Get_user_card_count(user_index) == 0){
+        QMessageBox* box = new QMessageBox();
+
+        box -> setWindowTitle("Предупреждение");
+        box -> setText("У вас нет зарегестрированных карт");
+
+        box -> exec();
+    }
 }
 
 void Home_window::on_Transactions_button_clicked()
 {
     ui -> stackedWidget -> setCurrentIndex(2);
+
+    if(meneger.Get_user_card_count(user_index) == 0){
+        QMessageBox* box = new QMessageBox();
+
+        box -> setWindowTitle("Предупреждение");
+        box -> setText("У вас нет зарегестрированных карт");
+
+        box -> exec();
+    }
 }
+
 
 void Home_window::Add_cards_to_scene(){
     scene -> clear();
@@ -99,8 +123,10 @@ void Home_window::Add_cards_to_scene(){
 
 void Home_window::on_Card_data_button_clicked()
 {
-    card_data_window = new Card_data_window(current_card);
+    card_data_window = new Card_data_window(user_index,current_card);
     card_data_window -> exec();
+
+    Update_transaction_table();
 }
 
 
@@ -159,6 +185,47 @@ void Home_window::on_menu_change_size_button_toggled(bool checked)
     timer -> start();
 }
 
+void Home_window::Update_transaction_table(){
+
+
+    ui -> Transactions_table_widget -> setColumnCount(3);
+
+    for(int i = 0 ; i < 3; ++i){
+        ui -> Transactions_table_widget -> setColumnWidth(i,ui -> Transactions_table_widget -> width() / 3);
+    }
+
+    Bank_account* account = current_card -> Get_bank_account();
+
+    QTableWidgetItem* item;
+
+    int current_row_count = 0;
+
+    for(int i = 0; i < current_card -> Get_banking_app_transsactions_count(); ++i){
+        ui -> Transactions_table_widget -> setRowCount(current_row_count + 1);
+
+        item = new QTableWidgetItem();
+
+        item -> setText(account -> Get_transactions_time(i).toString("hh:mm:ss dd-MM-yyyy"));
+
+        ui -> Transactions_table_widget -> setItem(current_row_count, 0, item);
+
+        item = new QTableWidgetItem();
+        item -> setText(account -> Get_transactions_state(i));
+
+        ui -> Transactions_table_widget -> setItem(current_row_count, 1, item);
+
+
+        item = new QTableWidgetItem();
+
+        item -> setText(AllUsersFile::From_long_double_to_QString(account -> Get_transactions_money(i)));
+
+        ui -> Transactions_table_widget -> setItem(current_row_count, 2, item);
+
+        current_row_count++;
+    }
+
+
+}
 
 void Home_window::on_Register_new_card_button_clicked()
 {
@@ -170,6 +237,9 @@ void Home_window::on_Register_new_card_button_clicked()
 
 void Home_window::on_Transfer_money_button_clicked()
 {
+    transfer_money_window = new Transfer_money_window();
+    transfer_money_window -> exec();
 
+    Update_transaction_table();
 }
 

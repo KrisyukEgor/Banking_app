@@ -3,10 +3,11 @@
 
 #include <iostream>
 
-Add_money_window::Add_money_window(Card* card, QWidget *parent) : QDialog(parent), ui(new Ui::Add_money_window)
+Add_money_window::Add_money_window(Card* card, long long user_index, QWidget *parent) : QDialog(parent), ui(new Ui::Add_money_window)
 {
     ui->setupUi(this);
     current_card = card;
+    current_user_index = user_index;
 
     QDoubleValidator* val = new QDoubleValidator(0,99999999, 2);
     ui -> Add_money_line -> setValidator(val);
@@ -36,7 +37,8 @@ void Add_money_window::on_Add_money_button_clicked()
     if(money + current_card -> Get_current_money() < 10000000000){
         double money = AllUsersFile::From_QString_to_long_double(money_str);
 
-        current_card -> Plus_money_to_bank_account(money);
+        Transactions::Add_money_card(current_card -> GetCardNumber(), money);
+        AllUsersFile::Add_transaction_to_file(current_user_index, current_card -> GetCardNumber());
 
         Update_window_money();
 

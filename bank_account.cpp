@@ -44,7 +44,6 @@ void Bank_account::SetName(QString value){
 long long Bank_account::Get_acc_number(QString acc_number){
     long long result = -1;
 
-
     acc_number.remove(0,5);
 
     QString first_part;
@@ -86,4 +85,47 @@ double Bank_account::Get_current_money(){
 
 QString Bank_account::GetName(){
     return name;
+}
+
+long long Bank_account::Get_transacrions_count(){
+    return transactions_list.length();
+}
+
+void Bank_account::Add_transaction(QDateTime time,QString message , double money){
+
+    QPair<QPair<QDateTime, QString>, double> temp = {{time, message}, money};
+
+    transactions_list.append(temp);
+
+}
+
+
+QDateTime Bank_account::Get_transactions_time(long long index){
+
+    return transactions_list[index].first.first;
+}
+
+QString Bank_account::Get_transactions_state(long long index){
+
+    return transactions_list[index].first.second;
+}
+double Bank_account::Get_transactions_money(long long index){
+
+    return transactions_list[index].second;
+}
+
+
+QDateTime Bank_account::Get_last_transactions_time(){
+
+    return transactions_list[transactions_list.length() - 1].first.first;
+}
+
+QString Bank_account::Get_last_transactions_state(){
+
+    return transactions_list[transactions_list.length() - 1].first.second;
+}
+
+double Bank_account::Get_last_transactions_money(){
+
+    return transactions_list[transactions_list.length() - 1].second;
 }

@@ -10,8 +10,6 @@ int main(int argc, char *argv[])
 
     w.setWindowTitle("");
 
-
-
     w.show();
 
 

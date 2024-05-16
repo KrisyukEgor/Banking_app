@@ -16,7 +16,7 @@
   <widget class="QFrame" name="frame">
    <property name="geometry">
     <rect>
-     <x>50</x>
+     <x>90</x>
      <y>30</y>
      <width>531</width>
      <height>461</height>
@@ -42,7 +42,7 @@ border-radius: 6px;
    <property name="frameShadow">
     <enum>QFrame::Raised</enum>
    </property>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>180</x>
@@ -243,7 +243,7 @@ border-radius: 6px;
      </font>
     </property>
     <property name="text">
-     <string>Средства</string>
+     <string>Баланс</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_7">

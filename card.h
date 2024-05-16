@@ -59,10 +59,12 @@ public:
 
     void Set_bank_account_name(QString);
 
-
-
     double Get_current_money();
     QString Get_banking_app_name();
+
+    long long Get_banking_app_transsactions_count();
+
+    void Add_transaction(QDateTime, QString, double);
 
     Bank_account* Get_bank_account();
 

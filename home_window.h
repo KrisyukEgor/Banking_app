@@ -15,6 +15,7 @@
 #include "card_to_scene.h"
 #include "register_new_card_window.h"
 #include "card_data_window.h"
+#include "transfer_money_window.h"
 
 namespace Ui {
 class Home_window;
@@ -67,6 +68,9 @@ private:
     void Add_cards_to_scene();
 
     Card_to_scene card_to_scene;
+    Transfer_money_window* transfer_money_window;
+
+    void Update_transaction_table();
 };
 
 #endif // HOME_WINDOW_H

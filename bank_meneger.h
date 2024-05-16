@@ -94,7 +94,15 @@ public:
     void Set_card_to_user(long long, Card*);
     void Add_card(Card*);
 
+    void Set_transaction_to_bank_acc(long long, QDateTime, QString, double);
+
     Card* Get_user_card(long long, long long);
+
+    bool Is_card_number_exists(QString);
+    bool Is_banking_app_exists(QString);
+
+    long long Get_user_index_from_card_name(QString);
+    long long Get_user_index_from_bank_app(QString);
 
 };
 

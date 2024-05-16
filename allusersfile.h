@@ -25,6 +25,10 @@ public:
 
     static double From_QString_to_long_double(QString);
     static QString From_long_double_to_QString(double);
+
+    static void Change_money_in_file(long long, QString, QString);
+
+    static void Add_transaction_to_file(long long, QString);
 };
 
 #endif // ALLUSERSFILE_H

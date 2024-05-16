@@ -130,6 +130,7 @@ void AllUsersFile::Users_in_file_to_meneger(){
             if(card_dir.exists()){
 
                 QStringList files_list = card_dir.entryList();
+                QString folder_name;
                 QString file_name;
 
                 for(int i = 0; i < files_list.length(); ++i){
@@ -137,20 +138,55 @@ void AllUsersFile::Users_in_file_to_meneger(){
                         continue;
                     }
 
-                    file_name = card_path + "/" + files_list[i];
+                    folder_name = card_path + "/" + files_list[i];
+
+                    QDir card_dir(folder_name);
+
+                    if(!card_dir.exists()){
+                        card_dir.mkdir(folder_name);
+                    }
+                    file_name = folder_name + "/" + files_list[i];
 
                     QFile card_file(file_name);
 
+                    Card* card = new Card();;
+
+                    QString transaction_folder_path = folder_name + "/transactions";
+
+                    QDir trans_dir(transaction_folder_path);
+
+                    if(trans_dir.exists()){
+
+                        QString trans_file_path = transaction_folder_path + "/Transactions";
+
+                        QFile trans_file(trans_file_path);
+
+                        if(trans_file.open(QIODevice::ReadOnly | QIODevice:: Text)){
+
+                            QTextStream trans_stream(&trans_file);
+
+                            QString date_str, state_str, money_str;
+
+                            while(!trans_stream.atEnd()){
+                                date_str = trans_stream.readLine();
+                                state_str = trans_stream.readLine();
+                                money_str = trans_stream.readLine();
+
+                                QDateTime date = QDateTime::fromString(date_str,"hh:mm:ss dd-MM-yyyy");
+                                double money = From_QString_to_long_double(money_str);
+
+                                card -> Add_transaction(date, state_str, money);
+
+                            }
+                            trans_file.close();
+                        }
+                    }
 
                     if(card_file.open(QIODevice::ReadOnly | QIODevice::Text)){
 
                         QTextStream card_stream(&card_file);
 
-                        Card* card = new Card();
-
                         QString card_number = card_stream.readLine();
-
-
 
                         QString banking_app_number = card_stream.readLine();
 
@@ -204,7 +240,16 @@ void AllUsersFile::Add_card_to_user(long long user_index, long long card_index){
 
     }
 
-    QString path_to_card = cards_folder_path + "/" + meneger.Get_user_card_number(user_index, card_index);
+
+    QString path_to_card_folder = cards_folder_path + "/" + meneger.Get_user_card_number(user_index, card_index);
+
+    QDir card_dir(path_to_card_folder);
+
+    if(!card_dir.exists()){
+        card_dir.mkdir(path_to_card_folder);
+    }
+
+    QString path_to_card = path_to_card_folder +  "/" + meneger.Get_user_card_number(user_index, card_index);
 
     QFile file(path_to_card);
 
@@ -234,32 +279,18 @@ void AllUsersFile::Add_card_to_user(long long user_index, long long card_index){
 
 QString AllUsersFile::From_long_double_to_QString(double number){
 
-    long long int_part = (long long)number;
-    double double_part = number - int_part;
-
-
-    QString double_temp;
-    double_part *= 100;
-    double_part = std::round(double_part);
-
-    if(double_part == 100.0){
-        int_part ++;
-        double_part = 0;
-    }
-
-    QString result = QString::number(int_part) + '.';
-
-
-
-    result += QString::number(double_part).rightJustified(2,'0');
-
-    return result;
+    return QString::number(number);
 }
 
 double AllUsersFile::From_QString_to_long_double(QString str){
+
     double result = 0;
 
     int dot_index = str.indexOf('.');
+
+    if(dot_index == -1){
+        dot_index = str.length();
+    }
 
     QString int_part_str = str.mid(0,dot_index);
     result += int_part_str.toLongLong();
@@ -272,4 +303,75 @@ double AllUsersFile::From_QString_to_long_double(QString str){
     result += double_part;
 
     return result;
+}
+
+
+void AllUsersFile::Change_money_in_file(long long user_index, QString card_number, QString money){
+
+    QString id = "/" + meneger.GetUserId(user_index);
+
+    QString path = meneger.Get_folder_path() + id + "/cards" + "/" + card_number + "/" + card_number;
+
+    QFile file(path);
+    qDebug() << "path" << path;
+
+    if(file.open(QIODevice::ReadWrite | QIODevice::Text)){
+        QTextStream stream(&file);
+
+        QString line;
+
+        qint64 last_pos = 0;
+
+        qint64 pos = 0;
+
+        while(!stream.atEnd()){
+
+            line = stream.readLine();
+
+            last_pos = pos;
+            pos += line.toUtf8().length() + 1;
+        }
+
+        file.resize(last_pos);
+
+        stream << money;
+
+        file.close();
+    }
+}
+
+void AllUsersFile::Add_transaction_to_file(long long user_index, QString card_number){
+
+    QString id = "/" + meneger.GetUserId(user_index);
+
+    QString folder_path = meneger.Get_folder_path() + id + "/cards" + "/" + card_number + "/transactions";
+
+    QDir dir(folder_path);
+
+    if(!dir.exists()){
+        dir.mkdir(folder_path);
+    }
+
+    QString file_path = folder_path + "/Transactions";
+
+    qDebug() << file_path;
+    QFile file(file_path);
+
+    if(file.open(QIODevice::Append | QIODevice::Text)){
+        QTextStream stream(&file);
+
+        Bank_account* account = meneger.Get_account_from_card(card_number);
+
+        qDebug() << account -> Get_last_transactions_state();
+
+        stream << account -> Get_last_transactions_time().toString("hh:mm:ss dd-MM-yyyy") << '\n';
+        stream << account -> Get_last_transactions_state() << '\n';
+        stream << account -> Get_last_transactions_money() << '\n';
+
+        file.close();
+    }
+    else{
+        qDebug() << "Not open";
+    }
+
 }

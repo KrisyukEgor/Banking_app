@@ -135,7 +135,15 @@ void Card::SetMonth(QString value){
 void Card::SetYear(QString value){
     year = value;
 }
+
+long long Card::Get_banking_app_transsactions_count() {
+    return bank_account -> Get_transacrions_count();
+}
+
 void Card::Set_bank_account_name(QString value){
     bank_account -> SetName(value);
 }
 
+void Card::Add_transaction(QDateTime time, QString str, double money) {
+    bank_account -> Add_transaction(time, str, money);
+}

@@ -258,6 +258,48 @@ void Bank_meneger::Register_new_Mastercard_card_to_user(long long index){
 
 }
 
+bool Bank_meneger::Is_card_number_exists(QString number){
+    for(int i = 0; i < all_cards_list.length(); ++i){
+        if(number == all_cards_list[i] -> GetCardNumber()){
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Bank_meneger::Is_banking_app_exists(QString number){
+    for(int i = 0; i < all_cards_list.length(); ++i){
+
+        if(number == all_cards_list[i] -> Get_banking_app_name()){
+            return true;
+        }
+    }
+    return false;
+}
+
+long long Bank_meneger::Get_user_index_from_card_name(QString name){
+
+    for(long long i = 0; i < user_list.length(); ++i){
+        for(long long j = 0; j < user_list[i].first -> Get_cards_count(); ++j){
+            if(user_list[i].first -> Get_card_number(j) == name){
+                return i;
+            }
+        }
+    }
+    return -1;
+}
+
+long long Bank_meneger::Get_user_index_from_bank_app(QString name){
+    for(long long i = 0; i < user_list.length(); ++i){
+        for(long long j = 0; j < user_list[i].first -> Get_cards_count(); ++j){
+            if(user_list[i].first -> Get_card_banking_app_name(j) == name){
+                return i;
+            }
+        }
+    }
+    return -1;
+}
+
 Card* Bank_meneger::Get_user_card(long long index, long long card_index){
     return user_list[index].first -> Get_card(card_index);
 }

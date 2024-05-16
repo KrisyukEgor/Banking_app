@@ -7,6 +7,7 @@
 
 #include "card.h"
 #include "allusersfile.h"
+#include "transactions.h"
 
 namespace Ui {
 class Add_money_window;
@@ -17,7 +18,7 @@ class Add_money_window : public QDialog
     Q_OBJECT
 
 public:
-    explicit Add_money_window(Card*,QWidget *parent = nullptr);
+    explicit Add_money_window(Card*,long long,QWidget *parent = nullptr);
     ~Add_money_window();
 
 private slots:
@@ -32,6 +33,7 @@ private:
     Card* current_card;
 
     void Update_window_money();
+    long long current_user_index;
 };
 
 #endif // ADD_MONEY_WINDOW_H
