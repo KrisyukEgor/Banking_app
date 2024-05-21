@@ -6,7 +6,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    Home_window w(0);
+    MainWindow w;
 
     w.setWindowTitle("");
 

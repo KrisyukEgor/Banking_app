@@ -10,6 +10,7 @@
 #include "transactions.h"
 #include "sha256.h"
 #include "luna.h"
+#include "blowfish.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -36,6 +37,8 @@ private slots:
 
     void on_View_PassWord_button_toggled(bool checked);
 
+
+    void on_Leave_button_clicked();
 
 private:
 

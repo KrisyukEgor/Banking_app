@@ -9,7 +9,7 @@ Home_window::Home_window(long long user_index, QWidget *parent) :QDialog(parent)
 {
     ui->setupUi(this);
 
-    ui -> stackedWidget -> setCurrentIndex(1);
+    ui -> stackedWidget -> setCurrentIndex(0);
     scene = new QGraphicsScene();
 
     ui -> graphicsView -> setScene(scene);
@@ -18,15 +18,8 @@ Home_window::Home_window(long long user_index, QWidget *parent) :QDialog(parent)
 
     ui -> Transactions_table_widget -> setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    QString folder_path = QDir::currentPath() + "/files";
-    QString file_path = folder_path + "/All users";
-
-    meneger.Set_file_path_to_all_users(file_path);
-    meneger.Set_folder_path(folder_path);
 
     current_card = new Card();
-
-    AllUsersFile::Users_in_file_to_meneger();
 
     Add_Personal_user_data_to_window();
 
@@ -34,7 +27,7 @@ Home_window::Home_window(long long user_index, QWidget *parent) :QDialog(parent)
 
     Update_transaction_table();
 
-
+    Add_cards_to_window();
 }
 
 Home_window::~Home_window()
@@ -60,15 +53,27 @@ void Home_window::Add_Personal_user_data_to_window(){
     ui -> Login_line -> setText(meneger.GetUserLogin(user_index));
     ui -> Email_line -> setText(meneger.GetUserEmail(user_index));
 
+
+}
+
+void Home_window::Add_cards_to_window(){
+
+    for(int i = 0 ; i < meneger.Get_user_card_count(user_index); ++i){
+        ui -> Cards_combo_box -> addItem(meneger.Get_user_card_number(user_index, i));
+    }
+
     if(meneger.Get_user_card_count(user_index) > 0){
-        current_card = meneger.Get_user_card(user_index, 1);
+
+        current_card = meneger.Get_user_card(user_index, 0);
 
         ui -> Card_number_line -> setText(current_card -> GetCardNumber());
+
+        card_rect = new Card_rect(current_card);
+        card_rect -> Add_card_to_scene(scene);
     }
 
 
 }
-
 
 void Home_window::on_Account_button_clicked()
 {
@@ -107,26 +112,26 @@ void Home_window::on_Transactions_button_clicked()
 void Home_window::Add_cards_to_scene(){
     scene -> clear();
 
-    QList<QPair<QString, long double>> temp;
-    QPair<QString, long double> temp_pair;
 
-    for(long long i = 0; i < meneger.Get_user_card_count(user_index); ++i){
-        temp_pair = {meneger.Get_user_card_number(user_index, i), meneger.Get_user_card_money(user_index, i)};
-        temp.append(temp_pair);
-    }
-
-    temp.append(temp_pair);
-
-    card_to_scene.Add_cards_to_scene(scene, temp);
 
 }
 
 void Home_window::on_Card_data_button_clicked()
 {
-    card_data_window = new Card_data_window(user_index,current_card);
-    card_data_window -> exec();
 
-    Update_transaction_table();
+    if(meneger.Get_user_card_count(user_index) > 0){
+        card_data_window = new Card_data_window(user_index,current_card);
+        card_data_window -> exec();
+
+        Update_transaction_table();
+        scene -> clear();
+
+        card_rect = new Card_rect(current_card);
+        card_rect -> Add_card_to_scene(scene);
+    }
+    else{
+        QMessageBox::warning(nullptr, "Предупреждение", "У вас нет карт, зарегестрируйте");
+    }
 }
 
 
@@ -229,17 +234,68 @@ void Home_window::Update_transaction_table(){
 
 void Home_window::on_Register_new_card_button_clicked()
 {
+
     register_new_card_window = new Register_new_card_window(user_index);
     register_new_card_window -> exec();
 
+    ui -> Cards_combo_box -> addItem(meneger.Get_user_card_number(user_index, meneger.Get_user_card_count(user_index) -1));
+
+    ui -> Cards_combo_box -> setCurrentIndex(meneger.Get_user_card_count(user_index) - 1);
 }
 
 
 void Home_window::on_Transfer_money_button_clicked()
 {
-    transfer_money_window = new Transfer_money_window();
-    transfer_money_window -> exec();
+    if(meneger.Get_user_card_count(user_index) > 0){
+        transfer_money_window = new Transfer_money_window();
+        transfer_money_window -> exec();
+
+        Update_transaction_table();
+
+        scene -> clear();
+
+        card_rect = new Card_rect(current_card);
+        card_rect -> Add_card_to_scene(scene);
+    }
+    else{
+        QMessageBox::warning(nullptr, "Предупреждение", "У вас нет карт, зарегестрируйте");
+    }
+
+}
+
+
+void Home_window::on_Pay_the_bill_button_clicked()
+{
+    if(meneger.Get_user_card_count(user_index) > 0){
+
+        pay_the_bill_window = new Pay_the_bill_window(user_index,current_card);
+        pay_the_bill_window -> exec();
+
+        Update_transaction_table();
+
+        scene -> clear();
+
+        card_rect = new Card_rect(current_card);
+        card_rect -> Add_card_to_scene(scene);
+    }
+    else{
+        QMessageBox::warning(nullptr, "Предупреждение", "У вас нет карт, зарегестрируйте");
+    }
+}
+
+
+void Home_window::on_Cards_combo_box_currentIndexChanged(int index)
+{
+
+    current_card = meneger.Get_user_card(user_index, index);
 
     Update_transaction_table();
+    ui -> Card_number_line -> setText(current_card -> GetCardNumber());
+
+    scene -> clear();
+
+    card_rect = new Card_rect(current_card);
+    card_rect -> Add_card_to_scene(scene);
+
 }
 

@@ -1,39 +1,24 @@
 #include "card_rect.h"
 
-Card_rect::Card_rect(QString number, long long count,QGraphicsItem *parent) : QGraphicsRectItem(parent)
+extern Bank_meneger& meneger;
+
+Card_rect::Card_rect(Card* card,QGraphicsItem *parent) : QGraphicsRectItem(parent)
 {
-    card_number = number;
-    money = count;
+    current_card = card;
 
     add_colors();
 }
 
-void Card_rect::Add_card_to_scene(QGraphicsScene *scene, qreal x , QString mode){
+void Card_rect::Add_card_to_scene(QGraphicsScene *scene){
 
-    this -> x = x;
-
-    if(mode == "big"){
-        y = 0;
-        width = 300;
-        height = 180;
-        Add_rect(scene);
-        Add_text(scene);
-    }
-
-    else if(mode == "small"){
-        y = 30;
-        width = 200;
-        height = 60;
-        Add_rect(scene);
-
-    }
-
+    Add_rect(scene);
+    Add_text(scene);
 }
 
 
 void Card_rect::Add_rect(QGraphicsScene* scene){
 
-    QRectF rect (x,y,width,height);
+    QRectF rect (0,0,300,180);
 
     qreal cornerRadius = 20.0;
 
@@ -48,9 +33,9 @@ void Card_rect::Add_rect(QGraphicsScene* scene){
 
     QLinearGradient gradient(rect.topLeft(), rect.bottomRight());
 
-    int index = QRandomGenerator::global() -> bounded(0,good_colors_list.length() - 1);
+    long long index_tmp = Bank_account::Get_acc_number(current_card -> Get_banking_app_name());
 
-    index = 1;
+    long long index = index_tmp % good_colors_list.length();
 
     QPair<QColor, QColor> colors = good_colors_list.at(index);
 
@@ -67,7 +52,7 @@ void Card_rect::Add_rect(QGraphicsScene* scene){
 
 void Card_rect::Add_text(QGraphicsScene *scene){
 
-    card_number_text = new QGraphicsTextItem(card_number);
+    card_number_text = new QGraphicsTextItem(current_card -> GetCardNumber());
 
     card_number_text -> setDefaultTextColor(Qt::white);
 
@@ -83,7 +68,7 @@ void Card_rect::Add_text(QGraphicsScene *scene){
 
     scene -> addItem(card_number_text);
 
-    QString money_str = AllUsersFile::From_long_double_to_QString(money);
+    QString money_str = AllUsersFile::From_long_double_to_QString(current_card -> Get_current_money());
 
     money_text = new QGraphicsTextItem(money_str);
 

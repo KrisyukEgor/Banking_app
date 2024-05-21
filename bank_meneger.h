@@ -98,8 +98,8 @@ public:
 
     Card* Get_user_card(long long, long long);
 
-    bool Is_card_number_exists(QString);
-    bool Is_banking_app_exists(QString);
+    bool Is_card_number_exists(QString, long long &);
+    bool Is_banking_app_exists(QString, long long &);
 
     long long Get_user_index_from_card_name(QString);
     long long Get_user_index_from_bank_app(QString);

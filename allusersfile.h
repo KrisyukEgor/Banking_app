@@ -7,6 +7,8 @@
 #include <QDebug>
 
 #include "bank_meneger.h"
+#include "sha256.h"
+#include "blowfish.h"
 
 class AllUsersFile
 {

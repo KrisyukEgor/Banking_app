@@ -258,19 +258,21 @@ void Bank_meneger::Register_new_Mastercard_card_to_user(long long index){
 
 }
 
-bool Bank_meneger::Is_card_number_exists(QString number){
-    for(int i = 0; i < all_cards_list.length(); ++i){
+bool Bank_meneger::Is_card_number_exists(QString number, long long &card_index){
+    for(long long i = 0; i < all_cards_list.length(); ++i){
         if(number == all_cards_list[i] -> GetCardNumber()){
+            card_index = i;
             return true;
+
         }
     }
     return false;
 }
 
-bool Bank_meneger::Is_banking_app_exists(QString number){
-    for(int i = 0; i < all_cards_list.length(); ++i){
-
+bool Bank_meneger::Is_banking_app_exists(QString number, long long& card_index){
+    for(long long i = 0; i < all_cards_list.length(); ++i){
         if(number == all_cards_list[i] -> Get_banking_app_name()){
+            card_index = i;
             return true;
         }
     }

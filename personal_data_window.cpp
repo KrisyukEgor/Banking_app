@@ -26,6 +26,9 @@ Personal_data_window::Personal_data_window(long long index, QWidget *parent) :QD
     ui -> Error_surname_label -> setHidden(true);
     ui -> Error_email_label -> setHidden(true);
 
+    QIcon icon ("/home/krisyuk-egor/Загрузки/Картинки/gratis-png-linea-triangular-negra-m-circulo-atras-flecha-atras-thumbnail.png");
+    ui -> Return_to_prev_window_button -> setIcon(icon);
+
 }
 
 Personal_data_window::~Personal_data_window()
@@ -137,6 +140,10 @@ void Personal_data_window::on_Continue_button_clicked()
 
                             emit(OpenMainWindow());
                             close();
+                            QMessageBox* box = new QMessageBox();
+                            box -> setWindowTitle("Уведомление");
+                            box -> setText("Аккаунт успешно создан!");
+                            box -> exec();
                         }
                     }
 

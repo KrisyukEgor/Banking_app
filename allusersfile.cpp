@@ -19,6 +19,7 @@ void AllUsersFile::Add_user_base_data_to_all_users_file(long long index){
     QString login = meneger.GetUserLogin(index);
     QString password = meneger.GetUserPassword(index);
 
+    login = SHA256::GetSha256(login);
 
     if(file.open(QIODevice::Append | QIODevice::Text)){
 
@@ -54,13 +55,13 @@ void AllUsersFile::Add_user_personal_data_to_file(long long index){
     if(file.open(QIODevice::Append | QIODevice::Text)){
         QTextStream stream(&file);
 
-        stream << meneger.GetUserSurname(index) << '\n';
-        stream << meneger.GetUserName(index) << '\n';
-        stream << meneger.GetUserMiddlename(index) << '\n';
-        stream << meneger.GetUserBirthDay(index).toString("dd.MM.yyyy") << '\n';
-        stream << meneger.GetUserEmail(index) << '\n';
-        stream << meneger.GetUserLogin(index) << '\n';
-        stream << meneger.GetUserId(index) << '\n';
+        stream << BlowFish::Encrypt(meneger.GetUserSurname(index)) << '\n';
+        stream << BlowFish::Encrypt(meneger.GetUserName(index)) << '\n';
+        stream << BlowFish::Encrypt(meneger.GetUserMiddlename(index)) << '\n';
+        stream << BlowFish::Encrypt(meneger.GetUserBirthDay(index).toString("dd.MM.yyyy")) << '\n';
+        stream << BlowFish::Encrypt(meneger.GetUserEmail(index)) << '\n';
+        stream << BlowFish::Encrypt(meneger.GetUserLogin(index)) << '\n';
+        stream << BlowFish::Encrypt(meneger.GetUserId(index)) << '\n';
 
         file.close();
     }
@@ -101,13 +102,13 @@ void AllUsersFile::Users_in_file_to_meneger(){
             if(person_file.open(QIODevice::ReadOnly | QIODevice::Text)){
                 QTextStream person_file_stream(&person_file);
 
-                QString surname = person_file_stream.readLine();
-                QString name = person_file_stream.readLine();
-                QString middlename = person_file_stream.readLine();
-                QDate date = QDate::fromString(person_file_stream.readLine(), "dd.MM.yyyy");
-                QString email = person_file_stream.readLine();
-                QString login = person_file_stream.readLine();
-                QString id = person_file_stream.readLine();
+                QString surname = BlowFish::Decrypt(person_file_stream.readLine());
+                QString name = BlowFish::Decrypt(person_file_stream.readLine());
+                QString middlename = BlowFish::Decrypt(person_file_stream.readLine());
+                QDate date = QDate::fromString(BlowFish::Decrypt(person_file_stream.readLine()), "dd.MM.yyyy");
+                QString email = BlowFish::Decrypt(person_file_stream.readLine());
+                QString login = BlowFish::Decrypt(person_file_stream.readLine());
+                QString id = BlowFish::Decrypt(person_file_stream.readLine());
 
 
                 user -> setName(name);
@@ -168,9 +169,9 @@ void AllUsersFile::Users_in_file_to_meneger(){
                             QString date_str, state_str, money_str;
 
                             while(!trans_stream.atEnd()){
-                                date_str = trans_stream.readLine();
-                                state_str = trans_stream.readLine();
-                                money_str = trans_stream.readLine();
+                                date_str = BlowFish::Decrypt(trans_stream.readLine());
+                                state_str = BlowFish::Decrypt(trans_stream.readLine());
+                                money_str = BlowFish::Decrypt(trans_stream.readLine());
 
                                 QDateTime date = QDateTime::fromString(date_str,"hh:mm:ss dd-MM-yyyy");
                                 double money = From_QString_to_long_double(money_str);
@@ -186,16 +187,16 @@ void AllUsersFile::Users_in_file_to_meneger(){
 
                         QTextStream card_stream(&card_file);
 
-                        QString card_number = card_stream.readLine();
+                        QString card_number = BlowFish::Decrypt(card_stream.readLine());
 
-                        QString banking_app_number = card_stream.readLine();
+                        QString banking_app_number = BlowFish::Decrypt(card_stream.readLine());
 
-                        QString pin = card_stream.readLine();
-                        QString cvv = card_stream.readLine();
-                        QString year = card_stream.readLine();
-                        QString month = card_stream.readLine();
+                        QString pin = BlowFish::Decrypt(card_stream.readLine());
+                        QString cvv = BlowFish::Decrypt(card_stream.readLine());
+                        QString year = BlowFish::Decrypt(card_stream.readLine());
+                        QString month = BlowFish::Decrypt(card_stream.readLine());
 
-                        long double money = From_QString_to_long_double(card_stream.readLine());
+                        double money = From_QString_to_long_double(BlowFish::Decrypt(card_stream.readLine()));
 
                         card -> Set_card_number(card_number);
                         card -> Set_bank_account_name(banking_app_number);
@@ -256,16 +257,16 @@ void AllUsersFile::Add_card_to_user(long long user_index, long long card_index){
     if(file.open(QIODevice::Append | QIODevice::Text)){
         QTextStream stream(&file);
 
-        stream << meneger.Get_user_card_number(user_index, card_index) << '\n';
-        stream << meneger.Get_user_card_banking_app_name(user_index, card_index) << '\n';
+        stream << BlowFish::Encrypt(meneger.Get_user_card_number(user_index, card_index)) << '\n';
+        stream << BlowFish::Encrypt(meneger.Get_user_card_banking_app_name(user_index, card_index)) << '\n';
 
-        stream << meneger.Get_user_card_pin(user_index, card_index) << '\n';
-        stream << meneger.Get_user_card_cvv(user_index, card_index) << '\n';
+        stream << BlowFish::Encrypt(meneger.Get_user_card_pin(user_index, card_index)) << '\n';
+        stream << BlowFish::Encrypt(meneger.Get_user_card_cvv(user_index, card_index)) << '\n';
 
-        stream << meneger.Get_user_card_year(user_index, card_index) << '\n';
-        stream << meneger.Get_user_card_month(user_index, card_index) << '\n';
+        stream << BlowFish::Encrypt(meneger.Get_user_card_year(user_index, card_index)) << '\n';
+        stream << BlowFish::Encrypt(meneger.Get_user_card_month(user_index, card_index)) << '\n';
 
-        stream << From_long_double_to_QString(meneger.Get_user_card_money(user_index, card_index)) << '\n';
+        stream << BlowFish::Encrypt(From_long_double_to_QString(meneger.Get_user_card_money(user_index, card_index))) << '\n';
 
         file.close();
 
@@ -315,6 +316,8 @@ void AllUsersFile::Change_money_in_file(long long user_index, QString card_numbe
     QFile file(path);
     qDebug() << "path" << path;
 
+    money = BlowFish::Encrypt(money);
+
     if(file.open(QIODevice::ReadWrite | QIODevice::Text)){
         QTextStream stream(&file);
 
@@ -362,11 +365,9 @@ void AllUsersFile::Add_transaction_to_file(long long user_index, QString card_nu
 
         Bank_account* account = meneger.Get_account_from_card(card_number);
 
-        qDebug() << account -> Get_last_transactions_state();
-
-        stream << account -> Get_last_transactions_time().toString("hh:mm:ss dd-MM-yyyy") << '\n';
-        stream << account -> Get_last_transactions_state() << '\n';
-        stream << account -> Get_last_transactions_money() << '\n';
+        stream << BlowFish::Encrypt(account -> Get_last_transactions_time().toString("hh:mm:ss dd-MM-yyyy")) << '\n';
+        stream << BlowFish::Encrypt(account -> Get_last_transactions_state()) << '\n';
+        stream << BlowFish::Encrypt(QString::number(account -> Get_last_transactions_money())) << '\n';
 
         file.close();
     }

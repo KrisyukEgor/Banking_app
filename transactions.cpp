@@ -71,6 +71,14 @@ int Transactions::do_transaction(long long from_user_index,long long to_user_ind
     QMessageBox* box = new QMessageBox();
     box -> setWindowTitle("Error");
 
+
+    if(from_acc == to_acc){
+        box -> setText("Невозможен перевод на одинаковые номера");
+        box -> exec();
+
+        return 3;
+    }
+
     if(from_acc -> Get_current_money() < money){
 
         box -> setText("Недостаточно средств");
@@ -89,6 +97,8 @@ int Transactions::do_transaction(long long from_user_index,long long to_user_ind
 
 
     if(result_money != to_acc -> Get_current_money()){
+        qDebug() << result_money << to_acc -> Get_current_money();
+
         result = 1;
 
         to_acc -> SetMoney(to_acc_current_money);
@@ -100,7 +110,7 @@ int Transactions::do_transaction(long long from_user_index,long long to_user_ind
     }
 
     else{
-        from_acc -> Add_transaction(QDateTime::currentDateTime(), "Списание средств", money);
+        from_acc -> Add_transaction(QDateTime::currentDateTime(), "Перевод средств", money);
 
         long long index = Bank_account::Get_acc_number(from_acc -> GetName()) - 1;
 
@@ -152,6 +162,47 @@ int Transactions::Add_money_card(QString card_number, double money){
     }
     else{
         account -> Add_transaction(QDateTime::currentDateTime(), "Зачисление", money);
+    }
+
+    return result;
+}
+
+int Transactions::Minus_money_card(QString card_number, double money, QString message){
+    int result = 0;
+
+    Bank_account* account = meneger.Get_account_from_card(card_number);
+
+    double current_money = account -> Get_current_money();
+
+    double result_money = current_money - money;
+
+    if(result_money < 0){
+        QMessageBox* box = new QMessageBox();
+        box -> setWindowTitle("Error");
+
+        box -> setText("недостаточно средств");
+        box -> exec();
+
+        return 2;
+    }
+
+    account -> Minus_money(money);
+
+    if(result_money != account -> Get_current_money()){
+
+        result = 1;
+
+        QMessageBox* box = new QMessageBox();
+        box -> setWindowTitle("Error");
+
+        box -> setText("Банковская ошибка");
+        box -> exec();
+
+        account -> SetMoney(current_money);
+
+    }
+    else{
+        account -> Add_transaction(QDateTime::currentDateTime(), message, money);
     }
 
     return result;

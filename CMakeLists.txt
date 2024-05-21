@@ -28,12 +28,13 @@ set(PROJECT_SOURCES
         luna.h luna.cpp
         bank_account.h bank_account.cpp
         transactions.h transactions.cpp
-        card_to_scene.h card_to_scene.cpp
         card_rect.h card_rect.cpp
         register_new_card_window.h register_new_card_window.cpp register_new_card_window.ui
         card_data_window.h card_data_window.cpp card_data_window.ui
         add_money_window.h add_money_window.cpp add_money_window.ui
         transfer_money_window.h transfer_money_window.cpp transfer_money_window.ui
+        pay_the_bill_window.h pay_the_bill_window.cpp pay_the_bill_window.ui
+        blowfish.h blowfish.cpp
 
 )
 

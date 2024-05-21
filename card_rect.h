@@ -9,16 +9,11 @@
 #include <QPair>
 
 #include "allusersfile.h"
-
+#include "card.h"
 
 class Card_rect : public QGraphicsRectItem
 {
 private:
-    qreal x,y;
-    qreal width,height;
-
-    QString card_number;
-    long long money;
 
     void Add_rect(QGraphicsScene*);
     void Add_text(QGraphicsScene*);
@@ -32,9 +27,11 @@ private:
     QGraphicsTextItem* money_text;
 
 public:
-    Card_rect(QString, long long, QGraphicsItem* parent = nullptr);
+    Card_rect(Card*, QGraphicsItem* parent = nullptr);
 
-    void Add_card_to_scene(QGraphicsScene*, qreal, QString mode);
+    Card* current_card;
+
+    void Add_card_to_scene(QGraphicsScene*);
 
     void Rect_to_right();
     void Rect_to_left();

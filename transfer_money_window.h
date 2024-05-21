@@ -6,6 +6,8 @@
 #include "transactions.h"
 #include <QRegularExpression>
 #include <QMessageBox>
+#include "luna.h"
+
 
 namespace Ui {
 class Transfer_money_window;
@@ -26,7 +28,9 @@ private slots:
 
     bool Is_lines_right();
 
-    bool Is_line_exist(int,QString);
+    bool Is_line_exist(int,QString, long long&);
+
+    bool Cvv_check(int, long long);
 
 
 private:

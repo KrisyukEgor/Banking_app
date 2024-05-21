@@ -11,11 +11,12 @@
 
 
 #include "card.h"
+#include "card_rect.h"
 #include "bank_meneger.h"
-#include "card_to_scene.h"
 #include "register_new_card_window.h"
 #include "card_data_window.h"
 #include "transfer_money_window.h"
+#include "pay_the_bill_window.h"
 
 namespace Ui {
 class Home_window;
@@ -55,6 +56,10 @@ private slots:
 
     void on_Transfer_money_button_clicked();
 
+    void on_Pay_the_bill_button_clicked();
+
+    void on_Cards_combo_box_currentIndexChanged(int index);
+
 private:
     Ui::Home_window *ui;
     QGraphicsScene* scene;
@@ -67,8 +72,11 @@ private:
 
     void Add_cards_to_scene();
 
-    Card_to_scene card_to_scene;
     Transfer_money_window* transfer_money_window;
+    Pay_the_bill_window* pay_the_bill_window;
+    Card_rect* card_rect;
+
+    void Add_cards_to_window();
 
     void Update_transaction_table();
 };

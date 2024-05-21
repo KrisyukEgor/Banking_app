@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
     ui -> Enter_button -> setStyleSheet("background-color: lightgreen;");
 
-    ui -> Registration_label -> setText("<a href=\"https://www.example.com\">Зарегестрироваться</a>");
+    ui -> Registration_label -> setText("<a href=\"https://www.example.com\">Зарегистрироваться</a>");
     ui -> Registration_label -> setCursor(Qt::PointingHandCursor);
 
     QIcon icon ("/home/krisyuk-egor/Загрузки/Картинки/71681.png");
@@ -36,6 +36,12 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     AllUsersFile::Users_in_file_to_meneger();
 
     connect(ui -> Registration_label, &QLabel::linkActivated, this, &MainWindow::Open_Registration_window);
+
+
+    QString number = "098";
+
+    number = BlowFish::Encrypt(number);
+    qDebug() << "dec" << BlowFish::Decrypt(number);
 
 }
 
@@ -108,6 +114,8 @@ void MainWindow::on_Enter_button_clicked()
                 home_window -> setFixedSize(1200,800);
 
 
+                connect(home_window, &Home_window::OpenMainWindow, this, &MainWindow::Open);
+
                 ui -> Login_line -> setText("");
                 ui -> Password_line -> setText("");
 
@@ -150,5 +158,11 @@ void MainWindow::on_View_PassWord_button_toggled(bool checked)
         ui -> Password_line -> setEchoMode(QLineEdit::Password);
 
     }
+}
+
+
+void MainWindow::on_Leave_button_clicked()
+{
+    close();
 }
 

@@ -68,13 +68,25 @@
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QLineEdit" name="surname_line"/>
+     <widget class="QLineEdit" name="surname_line">
+      <property name="maxLength">
+       <number>70</number>
+      </property>
+     </widget>
     </item>
     <item>
-     <widget class="QLineEdit" name="name_line"/>
+     <widget class="QLineEdit" name="name_line">
+      <property name="maxLength">
+       <number>70</number>
+      </property>
+     </widget>
     </item>
     <item>
-     <widget class="QLineEdit" name="middle_name_line"/>
+     <widget class="QLineEdit" name="middle_name_line">
+      <property name="maxLength">
+       <number>70</number>
+      </property>
+     </widget>
     </item>
     <item>
      <widget class="QDateEdit" name="date_datetime">
@@ -98,7 +110,11 @@
      </widget>
     </item>
     <item>
-     <widget class="QLineEdit" name="Email_line"/>
+     <widget class="QLineEdit" name="Email_line">
+      <property name="maxLength">
+       <number>70</number>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
